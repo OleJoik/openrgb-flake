@@ -1,3 +1,4 @@
+
 {
   description = "OpenRGB Nix flake";
 
@@ -38,10 +39,6 @@
             pkgs.libsForQt5.qtwayland
           ];
 
-          installPhase = ''
-            mkdir -p $out/bin
-            cp openrgb $out/bin/
-          '';
 
           postPatch = ''
             patchShebangs scripts/build-udev-rules.sh
@@ -49,15 +46,26 @@
 
           buildPhase = ''
             runHook preBuild
-            qmake
+
+            mkdir build
+            cd build
+
+            qmake ../OpenRGB.pro
             make
-            scripts/build-udev-rules.sh
+
+            ../scripts/build-udev-rules.sh ../ 59deaad070bfb591c458df9a6e3a62decb36282b
+
+            cd ..
+
             runHook postBuild
           '';
 
-          installUdevRulesPhase = ''
+
+          installPhase = ''
+            mkdir -p $out/bin
+            cp build/openrgb $out/bin/
             mkdir -p $out/lib/udev/rules.d
-            cp rules.d/60-openrgb.rules $out/lib/udev/rules.d/
+            cp build/60-openrgb.rules $out/lib/udev/rules.d/
           '';
 
           meta = with lib; {
@@ -67,6 +75,24 @@
             platforms = platforms.linux;
             mainProgram = "openrgb";
           };
+        };
+
+        devShells.default = pkgs.mkShell {
+          name = "openrgb-dev";
+
+          nativeBuildInputs = [
+            pkgs.pkg-config
+            pkgs.libsForQt5.qmake
+          ];
+
+          buildInputs = [
+            pkgs.libusb1
+            pkgs.hidapi
+            pkgs.mbedtls_2
+            pkgs.libsForQt5.qtbase
+            pkgs.libsForQt5.qttools
+            pkgs.libsForQt5.qtwayland
+          ];
         };
 
         defaultPackage = self.packages.${system}.openrgb;
