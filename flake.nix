@@ -49,6 +49,14 @@
               --replace-fail /bin/chmod ${pkgs.coreutils}/bin/chmod
           '';
 
+          buildPhase = ''
+            runHook preBuild
+            qmake
+            make
+            scripts/build-udev-rules.sh
+            runHook postBuild
+          '';
+
           installUdevRulesPhase = ''
             mkdir -p $out/lib/udev/rules.d
             cp rules.d/60-openrgb.rules $out/lib/udev/rules.d/
