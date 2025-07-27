@@ -66,7 +66,7 @@
           
             mkdir -p $out/lib/udev/rules.d
             substitute ./build/60-openrgb.rules $out/lib/udev/rules.d/60-openrgb.rules \
-              --replace "/usr/bin/env" "env"
+              --replace "/usr/bin/env" "${pkgs.coreutils}/bin/env"
           '';
 
 
