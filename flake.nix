@@ -43,7 +43,12 @@
             cp openrgb $out/bin/
           '';
 
-          # Install OpenRGB's udev rules into /lib/udev/rules.d
+          postPatch = ''
+            patchShebangs scripts/build-udev-rules.sh
+            substituteInPlace scripts/build-udev-rules.sh \
+              --replace-fail /bin/chmod ${pkgs.coreutils}/bin/chmod
+          '';
+
           installUdevRulesPhase = ''
             mkdir -p $out/lib/udev/rules.d
             cp rules.d/60-openrgb.rules $out/lib/udev/rules.d/
