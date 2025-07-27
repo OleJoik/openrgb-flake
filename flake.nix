@@ -45,8 +45,6 @@
 
           postPatch = ''
             patchShebangs scripts/build-udev-rules.sh
-            substituteInPlace scripts/build-udev-rules.sh \
-              --replace-fail /bin/chmod ${pkgs.coreutils}/bin/chmod
           '';
 
           buildPhase = ''
