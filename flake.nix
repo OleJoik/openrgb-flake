@@ -1,4 +1,3 @@
-
 {
   description = "OpenRGB Nix flake";
 
@@ -51,7 +50,7 @@
             cd build
 
             qmake ../OpenRGB.pro
-            make
+            make -j$NIX_BUILD_CORES
 
             ../scripts/build-udev-rules.sh ../ 59deaad070bfb591c458df9a6e3a62decb36282b
 
@@ -61,15 +60,13 @@
           '';
 
 
-          installPhase = ''
-            mkdir -p $out/bin
-            cp build/openrgb $out/bin/
-            substitute build/60-openrgb.rules $out/lib/udev/rules.d/60-openrgb.rules \
-              --replace "/usr/bin/env" "env"
+            installPhase = ''
+              mkdir -p $out/bin
+              cp ./build/openrgb $out/bin/
 
-            mkdir -p $out/lib/udev/rules.d
-            cp build/60-openrgb.rules $out/lib/udev/rules.d/
-          '';
+              mkdir -p $out/lib/udev/rules.d
+              cp ./build/60-openrgb.rules $out/lib/udev/rules.d/
+            '';
 
           meta = with lib; {
             description = "Open source RGB lighting control";
