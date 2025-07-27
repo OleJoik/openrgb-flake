@@ -63,6 +63,17 @@
            installPhase = ''
             mkdir -p $out/bin
             cp ./build/openrgb $out/bin/
+
+            cat > $out/share/applications/openrgb.desktop <<EOF
+[Desktop Entry]
+Name=OpenRGB
+Comment=Control RGB lighting
+Exec=$out/bin/openrgb
+Icon=openrgb
+Terminal=false
+Type=Application
+Categories=Utility;
+EOF
           
             mkdir -p $out/lib/udev/rules.d
             substitute ./build/60-openrgb.rules $out/lib/udev/rules.d/60-openrgb.rules \
