@@ -64,6 +64,9 @@
           installPhase = ''
             mkdir -p $out/bin
             cp build/openrgb $out/bin/
+            substitute build/60-openrgb.rules $out/lib/udev/rules.d/60-openrgb.rules \
+              --replace "/usr/bin/env" "env"
+
             mkdir -p $out/lib/udev/rules.d
             cp build/60-openrgb.rules $out/lib/udev/rules.d/
           '';
