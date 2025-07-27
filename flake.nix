@@ -64,6 +64,7 @@
             mkdir -p $out/bin
             cp ./build/openrgb $out/bin/
 
+            mkdir -p $out/share/applications
             cat > $out/share/applications/openrgb.desktop <<EOF
 [Desktop Entry]
 Name=OpenRGB
